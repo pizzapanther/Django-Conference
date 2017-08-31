@@ -47,7 +47,6 @@ class CSVFileGenerator(object):
 
   def getIteratorResponse(self):
     response = http.HttpResponse(self.generate(), content_type=self.mimeType)
-    response['Content-Disposition'
-            ] = 'attachment; filename=' + self.getFileName()
+    response[
+        'Content-Disposition'] = 'attachment; filename=' + self.getFileName()
     return response
-    

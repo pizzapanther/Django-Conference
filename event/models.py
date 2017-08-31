@@ -28,12 +28,10 @@ class Conference(models.Model):
   registration_open = models.DateTimeField()
   registration_closed = models.DateTimeField()
 
-  cfp_open = models.DateTimeField("Call for Proposals Open",
-                                  blank=True,
-                                  null=True)
-  cfp_closed = models.DateTimeField("Call for Proposals Closed",
-                                    blank=True,
-                                    null=True)
+  cfp_open = models.DateTimeField(
+      "Call for Proposals Open", blank=True, null=True)
+  cfp_closed = models.DateTimeField(
+      "Call for Proposals Closed", blank=True, null=True)
 
   active = models.BooleanField()
 
@@ -103,9 +101,8 @@ class Sponsor(models.Model):
 
   active = models.BooleanField()
 
-  logo = models.ImageField(upload_to="sponsor_logos/%Y-%m/",
-                           blank=True,
-                           null=True)
+  logo = models.ImageField(
+      upload_to="sponsor_logos/%Y-%m/", blank=True, null=True)
 
   def __str__(self):
     return self.name
@@ -120,12 +117,10 @@ class Sponsor(models.Model):
       c = {'sponsor': self}
 
       slug = self.level.conference.slug
-      text_templates = (
-          'conference/{}/sponsor-notify.email.txt'.format(slug),
-          'conference/sponsor-notify.email.txt')
-      html_templates = (
-          'conference/{}/sponsor-notify.email.html'.format(slug),
-          'conference/sponsor-notify.email.html')
+      text_templates = ('conference/{}/sponsor-notify.email.txt'.format(slug),
+                        'conference/sponsor-notify.email.txt')
+      html_templates = ('conference/{}/sponsor-notify.email.html'.format(slug),
+                        'conference/sponsor-notify.email.html')
 
       text = render_to_string(text_templates, c)
       html = render_to_string(html_templates, c)
@@ -169,7 +164,8 @@ class Room(models.Model):
 SESSION_TYPES = (
     ('lightning', 'Lightning Talk (5 Minutes)'),
     ('talk-short', 'Short Talk (20 Minutes)'),
-    ('talk-long', 'Talk (50 Minutes)'), ('tutorial', 'Tutorial (3 Hours)'),
+    ('talk-long', 'Talk (50 Minutes)'),
+    ('tutorial', 'Tutorial (3 Hours)'),
     ('non-talk', 'Non Talk'),)
 
 SESSION_LENGTH = {
@@ -180,11 +176,14 @@ SESSION_LENGTH = {
 }
 
 SESSION_STATUS = (
-    ('submitted', 'Submitted'), ('maybe', 'Maybe'), ('accepted', 'Accepted'),
+    ('submitted', 'Submitted'),
+    ('maybe', 'Maybe'),
+    ('accepted', 'Accepted'),
     ('declined', 'Declined'),)
 
 SESSION_LEVELS = (
-    ('beginner', 'Beginner'), ('intermediate', 'Intermediate'),
+    ('beginner', 'Beginner'),
+    ('intermediate', 'Intermediate'),
     ('advanced', 'Advanced'),)
 
 
@@ -202,24 +201,22 @@ class Session(models.Model):
   video_url = models.URLField('URL To Video', blank=True, null=True)
 
   stype = models.CharField('Session Type', max_length=25, choices=SESSION_TYPES)
-  level = models.CharField('Audience Level',
-                           max_length=25,
-                           choices=SESSION_LEVELS)
+  level = models.CharField(
+      'Audience Level', max_length=25, choices=SESSION_LEVELS)
 
-  status = models.CharField(max_length=25,
-                            choices=SESSION_STATUS,
-                            default='submitted')
+  status = models.CharField(
+      max_length=25, choices=SESSION_STATUS, default='submitted')
 
   start = models.DateTimeField(blank=True, null=True)
-  duration = models.IntegerField(blank=True,
-                                 null=True,
-                                 help_text="Time in Minutes")
+  duration = models.IntegerField(
+      blank=True, null=True, help_text="Time in Minutes")
 
   special_requirements = models.TextField(
       blank=True,
       null=True,
       help_text=
-      "If you require any special equipment or materials, please let us know here.")
+      "If you require any special equipment or materials, please let us know here."
+  )
 
   def __str__(self):
     return self.name
@@ -241,15 +238,16 @@ class Session(models.Model):
     message = render_to_string('conference/email.talk-submission.txt',
                                {'request': request,
                                 'session': self})
-    send_mail(subject,
-              message,
-              settings.DEFAULT_FROM_EMAIL,
-              SPEAKER_NOTIFY,
-              fail_silently=False)
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        SPEAKER_NOTIFY,
+        fail_silently=False)
 
   def admin_link(self):
-    return '{}://{}/admin/conference/session/{}/'.format(SITE_PROTOCOL,
-                                                         SITE_DOMAIN, self.id)
+    return '{}://{}/admin/conference/session/{}/'.format(
+        SITE_PROTOCOL, SITE_DOMAIN, self.id)
 
   def user_link(self):
     return '{}://{}/admin/profiles/user/{}/'.format(SITE_PROTOCOL, SITE_DOMAIN,
@@ -350,11 +348,10 @@ class Invoice(models.Model):
     message += url
     message += '\n\n'
 
-    send_mail(self.subject,
-              message,
-              settings.DEFAULT_FROM_EMAIL,
-              [self.to],
-              fail_silently=False)
+    send_mail(
+        self.subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL, [self.to],
+        fail_silently=False)
     self.sent = timezone.now()
     self.save()
-    

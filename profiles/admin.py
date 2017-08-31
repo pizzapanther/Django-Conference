@@ -33,8 +33,8 @@ class User2CreationForm(UserCreationForm):
     except User.DoesNotExist:
       return username
 
-    raise forms.ValidationError(self.error_messages['duplicate_username'],
-                                code='duplicate_username')
+    raise forms.ValidationError(
+        self.error_messages['duplicate_username'], code='duplicate_username')
 
 
 class User2ChangeForm(UserChangeForm):
@@ -45,6 +45,7 @@ class User2ChangeForm(UserChangeForm):
 
 
 permission_required('profiles.change_user')
+
 
 class CurrentSpeakerFilter(admin.SimpleListFilter):
   title = 'Current Speaker'
@@ -60,6 +61,7 @@ class CurrentSpeakerFilter(admin.SimpleListFilter):
           session__conference__slug=settings.DEFAULT_CONF).exclude(
               session__stype='lightning')
 
+
 @admin.register(User)
 class User2Admin(UserAdmin):
   list_display = ('username', 'email', 'first_name', 'last_name', 'phone',
@@ -71,27 +73,33 @@ class User2Admin(UserAdmin):
   add_form = User2CreationForm
 
   fieldsets = (
-      (None, {'fields': ('username', 'password')}), ('Personal info', {
+      (None, {
+          'fields': ('username', 'password')
+      }),
+      ('Personal info', {
           'fields': ('first_name', 'last_name', 'email', 'verified_email',
                      'phone', 'website', 'avatar', 'biography')
-      }), ('Permissions',
-           {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups')
-           }), ('Important dates', {'fields': ('last_login', 'date_joined')}),)
+      }),
+      ('Permissions', {
+          'fields': ('is_active', 'is_staff', 'is_superuser', 'groups')
+      }),
+      ('Important dates', {
+          'fields': ('last_login', 'date_joined')
+      }),)
 
   readonly_fields = ('last_login', 'date_joined')
 
-  add_fieldsets = (
-      (None, {
-          'classes': ('wide',),
-          'fields':
-          ('username', 'email', 'verified_email', 'password1', 'password2')
-      }),)
+  add_fieldsets = ((None, {
+      'classes': ('wide',),
+      'fields': ('username', 'email', 'verified_email', 'password1',
+                 'password2')
+  }),)
 
   def current_speaker(self, obj):
     return 'coming soon'
-    if obj.session_set.filter(status='accepted',
-                              conference__slug=settings.DEFAULT_CONF).exclude(
-                                  stype='lightning').count() > 0:
+    if obj.session_set.filter(
+        status='accepted', conference__slug=settings.DEFAULT_CONF).exclude(
+            stype='lightning').count() > 0:
       return '<strong style="color: green;">&#10003;</strong>'
 
     return '<strong style="color: red;">&times;</strong>'

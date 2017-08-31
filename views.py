@@ -6,36 +6,46 @@ from django.templatetags.static import static
 from pytx.files import JS, CSS, FONTS, IMAGES, MD, tpl_files
 from pytx.release import RELEASE, DEV
 
-def site_context (context):
-  context['site'] = {
-    'name': 'PyTexas'
-  }
-  
+
+def site_context(context):
+  context['site'] = {'name': 'PyTexas'}
+
   tpls = tpl_files()
-  
+
   context['debug'] = DEV
   context['release'] = RELEASE
   context['files'] = {
-    'js': JS,
-    'css': CSS,
-    'fonts': FONTS,
-    'images': IMAGES,
-    'md': MD,
-    'templates': tpls,
+      'js': JS,
+      'css': CSS,
+      'fonts': FONTS,
+      'images': IMAGES,
+      'md': MD,
+      'templates': tpls,
   }
-  
+
   return context
-  
+
+
 @cache_page(60 * 5, key_prefix=RELEASE)
-def favicon (request):
+def favicon(request):
   return http.HttpResponseRedirect(static('favicon.ico'))
-  
+
+
 @cache_page(60 * 5, key_prefix=RELEASE)
-def frontend (request):
+def frontend(request):
   if request.path == '/':
     #todo: use current conference
     return http.HttpResponseRedirect("/2017/")
-    
+
   context = {}
   return TemplateResponse(request, 'frontend.html', site_context(context))
-  
+
+
+@cache_page(60 * 5, key_prefix=RELEASE)
+def sw(request):
+  context = {}
+  return TemplateResponse(
+      request,
+      'service-worker.js',
+      site_context(context),
+      content_type="application/javascript")

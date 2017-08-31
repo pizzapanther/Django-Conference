@@ -45,13 +45,12 @@ class CSVAdminMixin(object):
                          self.list_select_related, self.list_per_page,
                          self.list_max_show_all, self.list_editable, self)
 
-      generator = CSVFileGenerator(queryset=cl.get_queryset(request),
-                                   tags=self.csv_rows)
+      generator = CSVFileGenerator(
+          queryset=cl.get_queryset(request), tags=self.csv_rows)
       return generator.getIteratorResponse()
 
-    return super(CSVAdminMixin,
-                 self).changelist_view(request,
-                                       extra_context=extra_context)
+    return super(CSVAdminMixin, self).changelist_view(
+        request, extra_context=extra_context)
 
 
 @admin.register(Conference)
@@ -63,10 +62,12 @@ class ConferenceAdmin(admin.ModelAdmin):
   search_fields = ('name',)
   date_hierarchy = 'start'
 
+
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
   list_display = ('name', 'conference', 'sorder')
   list_filter = ('conference',)
+
 
 @admin.register(SponsorshipLevel)
 class SponsorshipLevelAdmin(admin.ModelAdmin):
@@ -75,6 +76,7 @@ class SponsorshipLevelAdmin(admin.ModelAdmin):
   list_editable = ('order',)
   raw_id_fields = ('conference',)
 
+
 @admin.register(Sponsor)
 class SponsorAdmin(admin.ModelAdmin):
   list_display = ('name', 'level', 'contact_name', 'contact_phone',
@@ -82,6 +84,7 @@ class SponsorAdmin(admin.ModelAdmin):
   list_filter = ('level', 'active')
   list_editable = ('active',)
   raw_id_fields = ('level',)
+
 
 @admin.register(Session)
 class SessionAdmin(CSVAdminMixin, admin.ModelAdmin):
@@ -95,6 +98,7 @@ class SessionAdmin(CSVAdminMixin, admin.ModelAdmin):
   date_hierarchy = 'start'
   list_editable = ('room', 'all_rooms', 'video_url', 'status', 'start')
   raw_id_fields = ('user',)
+
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
@@ -110,8 +114,8 @@ class InvoiceAdmin(admin.ModelAdmin):
         m.update(obj.to.encode('utf-8'))
         m.update(obj.text.encode('utf-8'))
         m.update(obj.subject.encode('utf-8'))
-        m.update(datetime.datetime.now().strftime(
-            "'%Y-%m-%d %H:%M:%S.%f").encode('utf-8'))
+        m.update(datetime.datetime.now().strftime("'%Y-%m-%d %H:%M:%S.%f")
+                 .encode('utf-8'))
         m.update(str(random.randint(0, 100000000)).encode('utf-8'))
         key = m.hexdigest()
         if Invoice.objects.filter(key=key).count() == 0:
@@ -134,8 +138,8 @@ class InvoiceAdmin(admin.ModelAdmin):
     info = self.model._meta.app_label, self.model._meta.model_name
 
     urlpatterns = [
-                    url(r'^(\d+)/send/$', wrap(self.send_view), name='%s_%s_send' % info)
-                  ]
+        url(r'^(\d+)/send/$', wrap(self.send_view), name='%s_%s_send' % info)
+    ]
 
     urlpatterns += super(InvoiceAdmin, self).get_urls()
 
