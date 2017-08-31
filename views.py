@@ -3,7 +3,7 @@ from django.views.decorators.cache import cache_page
 from django.template.response import TemplateResponse
 from django.templatetags.static import static
 
-from pytx.files import JS, CSS, FONTS, IMAGES, tpl_files
+from pytx.files import JS, CSS, FONTS, IMAGES, MD, tpl_files
 from pytx.release import RELEASE, DEV
 
 def site_context (context):
@@ -20,6 +20,7 @@ def site_context (context):
     'css': CSS,
     'fonts': FONTS,
     'images': IMAGES,
+    'md': MD,
     'templates': tpls,
   }
   
