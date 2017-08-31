@@ -32,6 +32,10 @@ def favicon (request):
   
 @cache_page(60 * 5, key_prefix=RELEASE)
 def frontend (request):
+  if request.path == '/':
+    #todo: use current conference
+    return http.HttpResponseRedirect("/2017/")
+    
   context = {}
   return TemplateResponse(request, 'frontend.html', site_context(context))
   
