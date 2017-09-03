@@ -1,6 +1,6 @@
 from django import http
 from django.conf import settings
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, never_cache
 from django.template.response import TemplateResponse
 from django.templatetags.static import static
 
@@ -33,6 +33,7 @@ def favicon(request):
 
 
 @cache_page(60 * 5, key_prefix=RELEASE)
+@never_cache
 def frontend(request):
   if request.path == '/':
     return http.HttpResponseRedirect("/{}/".format(settings.CURRENT_CONF))
@@ -42,6 +43,7 @@ def frontend(request):
 
 
 @cache_page(60 * 5, key_prefix=RELEASE)
+@never_cache
 def sw(request):
   context = {}
   return TemplateResponse(
@@ -49,3 +51,8 @@ def sw(request):
       'service-worker.js',
       site_context(context),
       content_type="application/javascript")
+
+@cache_page(60 * 5, key_prefix=RELEASE)
+def release(request):
+  return http.JsonResponse({'release': RELEASE})
+  
