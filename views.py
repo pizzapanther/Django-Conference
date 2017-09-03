@@ -15,6 +15,7 @@ def site_context(context):
   context['debug'] = DEV
   context['release'] = RELEASE
   context['conf'] = settings.CURRENT_CONF
+  context['skip_sw'] = getattr(settings, 'SKIP_SW', False)
   context['files'] = {
       'js': JS,
       'css': CSS,
