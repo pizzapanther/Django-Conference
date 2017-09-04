@@ -16,6 +16,7 @@ def site_context(context):
   context['debug'] = DEV
   context['release'] = RELEASE
   context['conf'] = settings.CURRENT_CONF
+  context['base_url'] = settings.BASE_URL
   context['skip_sw'] = getattr(settings, 'SKIP_SW', False)
   context['files'] = {
       'js': JS,
@@ -58,3 +59,12 @@ def sw(request):
 @cache_page(60 * 5, key_prefix=RELEASE)
 def release(request):
   return http.JsonResponse({'release': RELEASE})
+
+@cache_page(60 * 5, key_prefix=RELEASE)
+def manifest(request):
+  return TemplateResponse(request, 'manifest.json', site_context({}), content_type="application/json")
+  
+@cache_page(60 * 5, key_prefix=RELEASE)
+def browserconfig(request):
+  return TemplateResponse(request, 'browserconfig.xml', site_context({}), content_type="application/xml")
+  
