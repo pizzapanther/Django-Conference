@@ -13,7 +13,7 @@ def json_attr(path):
 
   return root
 
+
 @register.filter
 def dist(path, d):
   return os.path.join(settings.FRONTEND, d, path)
-  

@@ -7,6 +7,7 @@ from django.templatetags.static import static
 from pytx.files import JS, CSS, FONTS, IMAGES, MD, tpl_files
 from pytx.release import RELEASE, DEV
 
+
 def site_context(context):
   context['site'] = {'name': 'PyTexas'}
 
@@ -53,7 +54,7 @@ def sw(request):
       site_context(context),
       content_type="application/javascript")
 
+
 @cache_page(60 * 5, key_prefix=RELEASE)
 def release(request):
   return http.JsonResponse({'release': RELEASE})
-  
