@@ -27,6 +27,7 @@ class SponsorNode(DjangoObjectType):
 
   class Meta:
     model = Sponsor
+    only_fields = ('name', 'url', 'description', 'level', 'active', 'logo')
     filter_fields = ['id']
     interfaces = (relay.Node,)
 
