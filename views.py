@@ -60,11 +60,20 @@ def sw(request):
 def release(request):
   return http.JsonResponse({'release': RELEASE})
 
+
 @cache_page(60 * 5, key_prefix=RELEASE)
 def manifest(request):
-  return TemplateResponse(request, 'manifest.json', site_context({}), content_type="application/json")
-  
+  return TemplateResponse(
+      request,
+      'manifest.json',
+      site_context({}),
+      content_type="application/json")
+
+
 @cache_page(60 * 5, key_prefix=RELEASE)
 def browserconfig(request):
-  return TemplateResponse(request, 'browserconfig.xml', site_context({}), content_type="application/xml")
-  
+  return TemplateResponse(
+      request,
+      'browserconfig.xml',
+      site_context({}),
+      content_type="application/xml")
