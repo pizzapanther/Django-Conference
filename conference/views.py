@@ -6,7 +6,7 @@ from django.templatetags.static import static
 
 from pytx.files import JS, CSS, FONTS, IMAGES, MD, tpl_files
 from pytx.release import RELEASE, DEV
-
+from pytx.schema import schema
 
 def site_context(context):
   context['site'] = {'name': 'PyTexas'}
@@ -77,3 +77,46 @@ def browserconfig(request):
       'browserconfig.xml',
       site_context({}),
       content_type="application/xml")
+
+QUERY = """
+query {
+  allConfs(slug: "{slug}" first: 1) {
+    edges{
+      node{
+        id
+        name
+        slug
+        
+        sponsorshiplevelSet{
+          edges{
+            node{
+              id
+              name
+              description
+              
+              sponsorSet(active: true){
+                edges{
+                  node{
+                    id
+                    name
+                    description
+                    url
+                    logoUrl
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+@cache_page(60 * 5, key_prefix=RELEASE)
+def conference_data(request, slug):
+  query = QUERY.replace('{slug}', slug)
+  result = schema.execute(query)
+  return http.JsonResponse(result.data)
+  

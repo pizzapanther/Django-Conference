@@ -111,7 +111,10 @@ class Sponsor(models.Model):
     return '<a href="{}" target="_blank">Webpage &raquo;</a>'.format(self.url)
 
   link.allow_tags = True
-
+  
+  def logo_url(self):
+    return self.logo.url
+    
   def notify(self):
     if SPONSOR_NOTIFY:
       c = {'sponsor': self}

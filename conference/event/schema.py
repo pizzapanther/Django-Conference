@@ -1,3 +1,4 @@
+import graphene
 from graphene import relay, ObjectType, AbstractType
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
@@ -24,10 +25,11 @@ class SponsorshipLevelNode(DjangoObjectType):
 
 
 class SponsorNode(DjangoObjectType):
-
+  logo_url = graphene.String(source='logo_url')
+  
   class Meta:
     model = Sponsor
-    only_fields = ('name', 'url', 'description', 'level', 'active', 'logo')
+    only_fields = ('name', 'url', 'description', 'level', 'active', 'logo', 'logo_url')
     filter_fields = ['id', 'active']
     interfaces = (relay.Node,)
 
