@@ -101,6 +101,7 @@ query {
                     name
                     description
                     url
+                    logo
                     logoUrl
                   }
                 }
