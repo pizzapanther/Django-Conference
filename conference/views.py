@@ -4,7 +4,7 @@ from django.views.decorators.cache import cache_page, never_cache
 from django.template.response import TemplateResponse
 from django.templatetags.static import static
 
-from pytx.files import JS, CSS, FONTS, IMAGES, MD, tpl_files
+from pytx.files import JS, JS_HEAD, CSS, FONTS, IMAGES, MD, tpl_files
 from pytx.release import RELEASE, DEV
 from pytx.schema import schema
 
@@ -20,6 +20,7 @@ def site_context(context):
   context['skip_sw'] = getattr(settings, 'SKIP_SW', False)
   context['files'] = {
       'js': JS,
+      'js_head': JS_HEAD,
       'css': CSS,
       'fonts': FONTS,
       'images': IMAGES,
