@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 class User(AbstractUser):
   first_name = None
   last_name = None
-  
+
   name = models.CharField(max_length=100, null=True, blank=True)
   verified_email = models.EmailField(
       null=True,
@@ -73,9 +73,7 @@ SOCIAL_SITES = (
     ('facebook', 'Facebook'),
     ('github', 'Github'),
     ('gplus', 'Google+'),
-    ('twitter', 'Twitter'),
-  )
-    
+    ('twitter', 'Twitter'),)
 
 SOCIAL_INFO = {
     'about.me': {

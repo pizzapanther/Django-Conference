@@ -37,4 +37,3 @@ def invoice(request, key):
       'STRIPE_PUB_KEY': settings.STRIPE_PUB_KEY
   }
   return TemplateResponse(request, templates, context=c)
-  

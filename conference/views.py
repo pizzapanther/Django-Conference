@@ -8,6 +8,7 @@ from pytx.files import JS, JS_HEAD, CSS, FONTS, IMAGES, MD, tpl_files
 from pytx.release import RELEASE, DEV
 from pytx.schema import schema
 
+
 def site_context(context):
   context['site'] = {'name': 'PyTexas'}
 
@@ -79,6 +80,7 @@ def browserconfig(request):
       site_context({}),
       content_type="application/xml")
 
+
 QUERY = """
 query {
   allConfs(slug: "{slug}" first: 1) {
@@ -116,9 +118,9 @@ query {
 }
 """
 
+
 @cache_page(60 * 5, key_prefix=RELEASE)
 def conference_data(request, slug):
   query = QUERY.replace('{slug}', slug)
   result = schema.execute(query)
   return http.JsonResponse(result.data)
-  

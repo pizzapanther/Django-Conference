@@ -111,10 +111,10 @@ class Sponsor(models.Model):
     return '<a href="{}" target="_blank">Webpage &raquo;</a>'.format(self.url)
 
   link.allow_tags = True
-  
+
   def logo_url(self):
     return self.logo.url
-    
+
   def notify(self):
     if SPONSOR_NOTIFY:
       c = {'sponsor': self}
@@ -221,7 +221,7 @@ class Session(models.Model):
       help_text=
       "If you require any special equipment or materials, please let us know here."
   )
-  
+
   from_import = models.CharField(blank=True, null=True, max_length=75)
 
   def __str__(self):
