@@ -68,7 +68,10 @@ SOCIAL_SITES = (
     ('facebook', 'Facebook'),
     ('github', 'Github'),
     ('gplus', 'Google+'),
-    ('twitter', 'Twitter'),)
+    ('twitter', 'Twitter'),
+    ('web', 'Web'),
+  )
+    
 
 SOCIAL_INFO = {
     'about.me': {
@@ -91,13 +94,17 @@ SOCIAL_INFO = {
         'domain': 'twitter.com/',
         'icon': 'fa-twitter-square'
     },
+    'web': {
+        'domain': '',
+        'icon': 'fa-twitter-globe'
+    },
 }
 
 
 class SocialHandle(models.Model):
   user = models.ForeignKey(
       settings.AUTH_USER_MODEL, related_name='social_handles')
-  username = models.CharField(max_length=35)
+  username = models.CharField(max_length=255)
   site = models.CharField(max_length=25, choices=SOCIAL_SITES)
 
   class Meta:
@@ -107,6 +114,12 @@ class SocialHandle(models.Model):
     return '{}: {}'.format(self.get_site_display(), self.username)
 
   def link(self):
+    if self.site == 'web':
+      if not self.username.startswith(('http://', 'https://')):
+        return 'http://{}'.format(self.username)
+        
+      return self.username
+      
     domain = SOCIAL_INFO[self.site]['domain']
     return 'http://{}{}'.format(domain, self.username)
 
