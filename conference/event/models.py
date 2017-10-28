@@ -221,6 +221,8 @@ class Session(models.Model):
       help_text=
       "If you require any special equipment or materials, please let us know here."
   )
+  
+  from_import = models.CharField(blank=True, null=True, max_length=75)
 
   def __str__(self):
     return self.name
@@ -235,7 +237,7 @@ class Session(models.Model):
     return self.user.email
 
   def full_name(self):
-    return u'{self.user.first_name} {self.user.last_name}'.format(self=self)
+    return self.user.name
 
   def send_submitted(self, request, conf):
     subject = "Talk Submission - {} - {}".format(self.user.__str__(), conf)

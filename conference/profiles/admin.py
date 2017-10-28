@@ -64,7 +64,7 @@ class CurrentSpeakerFilter(admin.SimpleListFilter):
 
 @admin.register(User)
 class User2Admin(UserAdmin):
-  list_display = ('username', 'email', 'first_name', 'last_name', 'phone',
+  list_display = ('username', 'email', 'name', 'phone',
                   'current_speaker', 'is_staff', 'is_superuser')
   #list_filter = (CurrentSpeakerFilter,)
   inlines = (SocialInline,)
@@ -77,17 +77,17 @@ class User2Admin(UserAdmin):
           'fields': ('username', 'password')
       }),
       ('Personal info', {
-          'fields': ('first_name', 'last_name', 'email', 'verified_email',
+          'fields': ('name', 'email', 'verified_email',
                      'phone', 'website', 'avatar', 'biography')
       }),
       ('Permissions', {
           'fields': ('is_active', 'is_staff', 'is_superuser', 'groups')
       }),
       ('Important dates', {
-          'fields': ('last_login', 'date_joined')
+          'fields': ('last_login', 'date_joined', 'from_import')
       }),)
 
-  readonly_fields = ('last_login', 'date_joined')
+  readonly_fields = ('last_login', 'date_joined', 'from_import')
 
   add_fieldsets = ((None, {
       'classes': ('wide',),

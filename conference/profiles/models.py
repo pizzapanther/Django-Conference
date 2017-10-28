@@ -9,6 +9,10 @@ from django.template.loader import render_to_string
 
 
 class User(AbstractUser):
+  first_name = None
+  last_name = None
+  
+  name = models.CharField(max_length=100, null=True, blank=True)
   verified_email = models.EmailField(
       null=True,
       blank=True,
@@ -23,6 +27,7 @@ class User(AbstractUser):
       upload_to="user_photos/%Y-%m", blank=True, null=True)
 
   phone = models.CharField(blank=True, null=True, max_length=25)
+  from_import = models.CharField(blank=True, null=True, max_length=75)
 
   def __str__(self):
     return self.username
@@ -69,7 +74,6 @@ SOCIAL_SITES = (
     ('github', 'Github'),
     ('gplus', 'Google+'),
     ('twitter', 'Twitter'),
-    ('web', 'Web'),
   )
     
 
@@ -93,11 +97,7 @@ SOCIAL_INFO = {
     'twitter': {
         'domain': 'twitter.com/',
         'icon': 'fa-twitter-square'
-    },
-    'web': {
-        'domain': '',
-        'icon': 'fa-twitter-globe'
-    },
+    }
 }
 
 
@@ -114,12 +114,6 @@ class SocialHandle(models.Model):
     return '{}: {}'.format(self.get_site_display(), self.username)
 
   def link(self):
-    if self.site == 'web':
-      if not self.username.startswith(('http://', 'https://')):
-        return 'http://{}'.format(self.username)
-        
-      return self.username
-      
     domain = SOCIAL_INFO[self.site]['domain']
     return 'http://{}{}'.format(domain, self.username)
 
