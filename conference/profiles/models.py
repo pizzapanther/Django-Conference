@@ -19,6 +19,9 @@ class User(AbstractUser):
       help_text=
       "If doesn't match e-mail field then user is sent a link to verify address."
   )
+  title = models.CharField(max_length=100, null=True, blank=True)
+  location = models.CharField(max_length=100, null=True, blank=True)
+
   biography = models.TextField(
       null=True, blank=True, help_text="Markdown formatted text accepted.")
   website = models.URLField(null=True, blank=True)
