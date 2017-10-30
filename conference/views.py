@@ -139,4 +139,8 @@ query {
 def conference_data(request, slug):
   query = QUERY.replace('{slug}', slug)
   result = schema.execute(query)
+  if result.invalid:
+      return http.JsonResponse({
+        'errors': [str(error) for error in result.errors]
+      })
   return http.JsonResponse(result.data)
