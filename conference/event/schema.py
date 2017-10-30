@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+
 import graphene
 from graphene import relay, ObjectType, AbstractType
 from graphene_django import DjangoObjectType
@@ -24,6 +26,14 @@ class SponsorshipLevelNode(DjangoObjectType):
     interfaces = (relay.Node,)
 
 
+class UserNode(DjangoObjectType):
+
+  class Meta:
+    model = get_user_model()
+    filter_fields = ['id']
+    interfaces = (relay.Node,)
+
+
 class SponsorNode(DjangoObjectType):
   logo_url = graphene.String(source='logo_url')
 
@@ -47,7 +57,7 @@ class SessionNode(DjangoObjectType):
 
   class Meta:
     model = Session
-    filter_fields = ['conference', 'id']
+    filter_fields = ['conference', 'id', 'status']
     interfaces = (relay.Node,)
 
 

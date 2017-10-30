@@ -89,14 +89,14 @@ query {
         id
         name
         slug
-        
+
         sponsorshiplevelSet{
           edges{
             node{
               id
               name
               description
-              
+
               sponsorSet(active: true){
                 edges{
                   node{
@@ -115,6 +115,22 @@ query {
       }
     }
   }
+  allSessions(status: "accepted") {
+    edges{
+      node{
+        id
+        name
+        description
+        status
+
+        user{
+          id
+          name
+          biography
+        }
+      }
+    }
+  }
 }
 """
 
@@ -123,4 +139,8 @@ query {
 def conference_data(request, slug):
   query = QUERY.replace('{slug}', slug)
   result = schema.execute(query)
+  if result.invalid:
+      return http.JsonResponse({
+        'errors': [str(error) for error in result.errors]
+      })
   return http.JsonResponse(result.data)
