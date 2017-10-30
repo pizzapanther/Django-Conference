@@ -73,6 +73,7 @@ SOCIAL_SITES = (
     ('facebook', 'Facebook'),
     ('github', 'Github'),
     ('gplus', 'Google+'),
+    ('linkedin', 'LinkedIn'),
     ('twitter', 'Twitter'),)
 
 SOCIAL_INFO = {
@@ -91,6 +92,10 @@ SOCIAL_INFO = {
     'gplus': {
         'domain': 'plus.google.com/+',
         'icon': 'fa-google-plus-square'
+    },
+    'linkedin': {
+        'domain': 'https://www.linkedin.com/in/',
+        'icon': 'fa-linkedin-square'
     },
     'twitter': {
         'domain': 'twitter.com/',
