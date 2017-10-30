@@ -89,14 +89,14 @@ query {
         id
         name
         slug
-        
+
         sponsorshiplevelSet{
           edges{
             node{
               id
               name
               description
-              
+
               sponsorSet(active: true){
                 edges{
                   node{
@@ -111,6 +111,22 @@ query {
               }
             }
           }
+        }
+      }
+    }
+  }
+  allSessions(status: "accepted") {
+    edges{
+      node{
+        id
+        name
+        description
+        status
+
+        user{
+          id
+          name
+          biography
         }
       }
     }
