@@ -143,4 +143,9 @@ def conference_data(request, slug):
       return http.JsonResponse({
         'errors': [str(error) for error in result.errors]
       })
+  # Sort sessions by their name
+  result.data['allSessions']['edges'] = sorted(
+    result.data['allSessions']['edges'],
+    key=lambda edge: edge['node']['name']
+  )
   return http.JsonResponse(result.data)
