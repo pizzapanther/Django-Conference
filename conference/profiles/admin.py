@@ -77,8 +77,8 @@ class User2Admin(UserAdmin):
           'fields': ('username', 'password')
       }),
       ('Personal info', {
-          'fields': ('name', 'email', 'verified_email', 'phone', 'website',
-                     'avatar', 'biography')
+          'fields': ('name', 'title', 'location', 'email', 'verified_email',
+                     'phone', 'website', 'avatar', 'biography')
       }),
       ('Permissions', {
           'fields': ('is_active', 'is_staff', 'is_superuser', 'groups')
