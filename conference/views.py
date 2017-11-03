@@ -121,6 +121,8 @@ query {
         id
         name
         description
+        duration
+        start
         status
 
         user{

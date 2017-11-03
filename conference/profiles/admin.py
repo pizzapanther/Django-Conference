@@ -67,6 +67,7 @@ class User2Admin(UserAdmin):
   list_display = ('username', 'email', 'name', 'phone', 'current_speaker',
                   'is_staff', 'is_superuser')
   #list_filter = (CurrentSpeakerFilter,)
+  search_fields = ('name', 'email', 'phone')
   inlines = (SocialInline,)
 
   form = User2ChangeForm
