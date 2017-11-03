@@ -131,6 +131,23 @@ query {
       }
     }
   }
+  allKeynotes(stype: "keynote") {
+    edges{
+      node{
+        id
+        name
+        description
+
+        user{
+          id
+          name
+          title
+          biography
+          avatar
+        }
+      }
+    }
+  }
 }
 """
 

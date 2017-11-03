@@ -57,7 +57,7 @@ class SessionNode(DjangoObjectType):
 
   class Meta:
     model = Session
-    filter_fields = ['conference', 'id', 'status']
+    filter_fields = ['conference', 'id', 'status', 'stype']
     interfaces = (relay.Node,)
 
 
@@ -67,3 +67,4 @@ class Query(AbstractType):
   all_sponsors = DjangoFilterConnectionField(SponsorNode)
   all_rooms = DjangoFilterConnectionField(RoomNode)
   all_sessions = DjangoFilterConnectionField(SessionNode)
+  all_keynotes = DjangoFilterConnectionField(SessionNode)
