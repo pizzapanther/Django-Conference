@@ -123,7 +123,13 @@ query {
         description
         duration
         start
+        end
         status
+        allRooms
+        room {
+          id
+          name
+        }
 
         user{
           id

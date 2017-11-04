@@ -232,7 +232,7 @@ class Session(models.Model):
     self.duration = SESSION_LENGTH[self.stype]
 
   class Meta:
-    ordering = ("start",)
+    ordering = ("start", "room__sorder")
 
   def email(self):
     return self.user.email

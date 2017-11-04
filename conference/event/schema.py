@@ -4,6 +4,7 @@ import graphene
 from graphene import relay, ObjectType, AbstractType
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
+from graphene.types.datetime import DateTime
 
 from conference.event.models import Conference, SponsorshipLevel, Sponsor, Room, Session
 
@@ -54,6 +55,7 @@ class RoomNode(DjangoObjectType):
 
 
 class SessionNode(DjangoObjectType):
+  end = DateTime(source='end')
 
   class Meta:
     model = Session
