@@ -99,30 +99,12 @@ SOCIAL_SITES = (
     ('twitter', 'Twitter'),)
 
 SOCIAL_INFO = {
-    'about.me': {
-        'domain': 'about.me/',
-        'icon': 'fa-user'
-    },
-    'facebook': {
-        'domain': 'facebook.com/',
-        'icon': 'fa-facebook-square'
-    },
-    'github': {
-        'domain': 'github.com/',
-        'icon': 'fa-github-square'
-    },
-    'gplus': {
-        'domain': 'plus.google.com/+',
-        'icon': 'fa-google-plus-square'
-    },
-    'linkedin': {
-        'domain': 'https://www.linkedin.com/in/',
-        'icon': 'fa-linkedin-square'
-    },
-    'twitter': {
-        'domain': 'twitter.com/',
-        'icon': 'fa-twitter-square'
-    }
+  'about.me': 'about.me/',
+  'facebook': 'facebook.com/',
+  'github': 'github.com/',
+  'gplus': 'plus.google.com/+',
+  'linkedin': 'www.linkedin.com/in/',
+  'twitter': 'twitter.com/',
 }
 
 
@@ -139,11 +121,7 @@ class SocialHandle(models.Model):
     return '{}: {}'.format(self.get_site_display(), self.username)
 
   def link(self):
-    domain = SOCIAL_INFO[self.site]['domain']
-    return 'http://{}{}'.format(domain, self.username)
-
-  def icon(self):
-    return SOCIAL_INFO[self.site]['icon']
+    return 'https://{}{}'.format(SOCIAL_INFO[self.site], self.username)
 
 
 class EmailVerification(models.Model):

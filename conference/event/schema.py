@@ -7,7 +7,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types.datetime import DateTime
 
 from conference.event.models import Conference, SponsorshipLevel, Sponsor, Room, Session
-
+from conference.profiles.models import SocialHandle
 
 class ConfNode(DjangoObjectType):
 
@@ -26,6 +26,11 @@ class SponsorshipLevelNode(DjangoObjectType):
     filter_fields = ['conference', 'id']
     interfaces = (relay.Node,)
 
+
+class SocialNode(DjangoObjectType):
+  class Meta:
+    model = SocialHandle
+    interfaces = (relay.Node,)
 
 class UserNode(DjangoObjectType):
   image = graphene.String(source='image')

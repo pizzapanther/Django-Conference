@@ -171,6 +171,17 @@ query {
           name
           biography
           image
+          website
+          
+          socialHandles{
+            edges{
+              node{
+                id
+                site
+                username
+              }
+            }
+          }
         }
       }
     }
