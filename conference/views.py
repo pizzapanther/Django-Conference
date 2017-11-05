@@ -123,7 +123,8 @@ query {
         description
         duration
         start
-        end
+        startStr
+        endStr
         status
         allRooms
         room {

@@ -56,7 +56,9 @@ class RoomNode(DjangoObjectType):
 
 class SessionNode(DjangoObjectType):
   end = DateTime(source='end')
-
+  start_str = graphene.String(source='start_str')
+  end_str = graphene.String(source='end_str')
+  
   class Meta:
     model = Session
     filter_fields = ['conference', 'id', 'status', 'stype']

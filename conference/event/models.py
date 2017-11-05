@@ -260,6 +260,12 @@ class Session(models.Model):
     return '{}://{}/admin/profiles/user/{}/'.format(SITE_PROTOCOL, SITE_DOMAIN,
                                                     self.user.id)
 
+  def start_str (self):
+    return self.start.strftime('%I:%M %p')
+    
+  def end_str (self):
+    return self.end().strftime('%I:%M %p')
+    
   def end(self):
     return self.start + datetime.timedelta(minutes=self.duration)
 
