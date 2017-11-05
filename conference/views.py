@@ -170,6 +170,7 @@ query {
           id
           name
           biography
+          image
         }
       }
     }

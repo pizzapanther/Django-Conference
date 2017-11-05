@@ -28,7 +28,8 @@ class SponsorshipLevelNode(DjangoObjectType):
 
 
 class UserNode(DjangoObjectType):
-
+  image = graphene.String(source='image')
+  
   class Meta:
     model = get_user_model()
     filter_fields = ['id']

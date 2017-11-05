@@ -1,5 +1,6 @@
 import random
 import hashlib
+from urllib.parse import urlencode
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -7,7 +8,25 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-
+def calculate_gravatar_hash(email):
+  enc_email = email.strip().lower().encode("utf-8")
+  email_hash = hashlib.md5(enc_email).hexdigest()
+  return email_hash
+  
+def get_gravatar_url(email, size=80, default='retro', rating='g'):
+  url_base = 'https://secure.gravatar.com/'
+  
+  email_hash = calculate_gravatar_hash(email)
+  
+  query_string = urlencode({
+    's': str(size),
+    'd': default,
+    'r': rating,
+  })
+  
+  return '{base}avatar/{hash}.jpg?{qs}'.format(
+    base=url_base, hash=email_hash, qs=query_string)
+  
 class User(AbstractUser):
   first_name = None
   last_name = None
