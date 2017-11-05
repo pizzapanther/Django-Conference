@@ -1,21 +1,55 @@
+import hashlib
+
 from django import http
 from django.conf import settings
-from django.views.decorators.cache import cache_page, never_cache
+from django.core.cache import cache
+from django.views.decorators.cache import never_cache
 from django.template.response import TemplateResponse
 from django.templatetags.static import static
 
 from pytx.files import JS, JS_HEAD, CSS, FONTS, IMAGES, MD, tpl_files
-from pytx.release import RELEASE, DEV
+from pytx.release import RELEASE, DEV, DATA, release_key
 from pytx.schema import schema
 
-
+class CachePage:
+  def __init__ (self, timeout=60 * 5, key_prefix=release_key):
+    self.timeout = timeout
+    self.key_prefix = key_prefix
+    self.target = None
+    
+  def __call__ (self, target):
+    self.target = target
+    return self.run
+    
+  def run (self, *args, **kw):
+    cache_key = self.key_prefix() + args[0].get_full_path()
+    cache_key = hashlib.sha1(cache_key.encode('utf-8')).hexdigest()
+    
+    cached_response = cache.get(cache_key)
+    if cached_response:
+      cached_response['PageCached'] = 'True'
+      return cached_response
+      
+    response = self.target(*args, **kw)
+    
+    print('Caching:', args[0].get_full_path())
+    if hasattr(response, 'render') and callable(response.render):
+      response.add_post_render_callback(
+        lambda r: cache.set(cache_key, r, self.timeout)
+      )
+      
+    else:
+      cache.set(cache_key, response, self.timeout)
+      
+    return response
+    
 def site_context(context):
   context['site'] = {'name': 'PyTexas'}
 
   tpls = tpl_files()
 
   context['debug'] = DEV
-  context['release'] = RELEASE
+  context['release'] = release_key()
   context['conf'] = settings.CURRENT_CONF
   context['base_url'] = settings.BASE_URL
   context['skip_sw'] = getattr(settings, 'SKIP_SW', False)
@@ -32,12 +66,12 @@ def site_context(context):
   return context
 
 
-@cache_page(60 * 5, key_prefix=RELEASE)
+@CachePage()
 def favicon(request):
   return http.HttpResponseRedirect(static('favicon.ico'))
 
 
-@cache_page(60 * 5, key_prefix=RELEASE)
+@CachePage()
 @never_cache
 def frontend(request):
   if request.path == '/':
@@ -47,7 +81,7 @@ def frontend(request):
   return TemplateResponse(request, 'frontend.html', site_context(context))
 
 
-@cache_page(60 * 5, key_prefix=RELEASE)
+@CachePage()
 @never_cache
 def sw(request):
   context = {}
@@ -58,12 +92,12 @@ def sw(request):
       content_type="application/javascript")
 
 
-@cache_page(60 * 5, key_prefix=RELEASE)
+@CachePage()
 def release(request):
-  return http.JsonResponse({'release': RELEASE})
+  return http.JsonResponse({'release': release_key()})
 
 
-@cache_page(60 * 5, key_prefix=RELEASE)
+@CachePage()
 def manifest(request):
   return TemplateResponse(
       request,
@@ -72,7 +106,7 @@ def manifest(request):
       content_type="application/json")
 
 
-@cache_page(60 * 5, key_prefix=RELEASE)
+@CachePage()
 def browserconfig(request):
   return TemplateResponse(
       request,
@@ -161,7 +195,7 @@ query {
 """
 
 
-@cache_page(60 * 5, key_prefix=RELEASE)
+@CachePage()
 def conference_data(request, slug):
   query = QUERY.replace('{slug}', slug)
   result = schema.execute(query)
