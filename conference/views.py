@@ -103,7 +103,7 @@ def manifest(request):
       request,
       'manifest.json',
       site_context({}),
-      content_type="application/json")
+      content_type="application/x-web-app-manifest+json")
 
 
 @CachePage()
