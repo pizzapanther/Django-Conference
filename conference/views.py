@@ -172,7 +172,9 @@ query {
           biography
           image
           website
-          
+          title
+          location
+
           socialHandles{
             edges{
               node{
