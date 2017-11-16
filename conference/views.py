@@ -6,6 +6,14 @@ from django.core.cache import cache
 from django.views.decorators.cache import never_cache
 from django.template.response import TemplateResponse
 from django.templatetags.static import static
+from django.shortcuts import get_object_or_404
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+
+from conference.event.models import Conference, Session
+from conference.event.serializers import SessionPyVideoSizzler
 
 from pytx.files import JS, JS_HEAD, CSS, FONTS, IMAGES, MD, tpl_files
 from pytx.release import RELEASE, DEV, DATA, release_key
@@ -115,6 +123,20 @@ def browserconfig(request):
       content_type="application/xml")
 
 
+@api_view(['GET'])
+@permission_classes((AllowAny,))
+def pyvideo(request, slug):
+  conf = get_object_or_404(Conference, slug=slug)
+
+  queryset = Session.objects.filter(
+      status='accepted',
+      conference=conf).order_by('start').select_related('room', 'user')
+
+  sizzler = SessionPyVideoSizzler(queryset,
+                                  many=True,
+                                  context={'request': request})
+  return Response(sizzler.data)
+  
 QUERY = """
 query {
   allConfs(slug: "{slug}" first: 1) {
