@@ -60,6 +60,7 @@ def site_context(context):
   context['release'] = release_key()
   context['conf'] = settings.CURRENT_CONF
   context['base_url'] = settings.BASE_URL
+  context['static_url'] = settings.STATIC_URL
   context['skip_sw'] = getattr(settings, 'SKIP_SW', False)
   context['files'] = {
       'js': JS,
