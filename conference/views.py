@@ -184,6 +184,8 @@ query {
         endStr
         status
         allRooms
+        videoUrl
+        slides
         room {
           id
           name
