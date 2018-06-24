@@ -6,7 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 
 from conference.settings import SPONSOR_NOTIFY, SPEAKER_NOTIFY, SITE_DOMAIN, SITE_PROTOCOL
@@ -66,7 +66,7 @@ def cfp_is_closed(start, end):
 
 
 class SponsorshipLevel(models.Model):
-  conference = models.ForeignKey(Conference)
+  conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
 
   name = models.CharField(max_length=100)
   cost = models.PositiveIntegerField()
@@ -97,7 +97,7 @@ class Sponsor(models.Model):
   contact_phone = models.CharField(max_length=100, blank=True, null=True)
   contact_email = models.EmailField(blank=True, null=True)
 
-  level = models.ForeignKey(SponsorshipLevel)
+  level = models.ForeignKey(SponsorshipLevel, on_delete=models.CASCADE)
 
   active = models.BooleanField()
 
@@ -135,7 +135,7 @@ class Sponsor(models.Model):
 
 
 class Room(models.Model):
-  conference = models.ForeignKey(Conference)
+  conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
   name = models.CharField(max_length=100)
   sorder = models.IntegerField('Order')
 
@@ -192,10 +192,10 @@ SESSION_LEVELS = (
 
 
 class Session(models.Model):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
-  conference = models.ForeignKey(Conference)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+  conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
 
-  room = models.ForeignKey(Room, blank=True, null=True)
+  room = models.ForeignKey(Room, blank=True, null=True, on_delete=models.PROTECT)
   all_rooms = models.BooleanField(default=False)
   video = models.BooleanField('Make recording', default=True)
 
@@ -262,10 +262,10 @@ class Session(models.Model):
 
   def start_str (self):
     return self.start.strftime('%I:%M %p')
-    
+
   def end_str (self):
     return self.end().strftime('%I:%M %p')
-    
+
   def end(self):
     return self.start + datetime.timedelta(minutes=self.duration)
 

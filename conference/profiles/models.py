@@ -12,21 +12,21 @@ def calculate_gravatar_hash(email):
   enc_email = email.strip().lower().encode("utf-8")
   email_hash = hashlib.md5(enc_email).hexdigest()
   return email_hash
-  
+
 def get_gravatar_url(email, size=80, default='retro', rating='g'):
   url_base = 'https://secure.gravatar.com/'
-  
+
   email_hash = calculate_gravatar_hash(email)
-  
+
   query_string = urlencode({
     's': str(size),
     'd': default,
     'r': rating,
   })
-  
+
   return '{base}avatar/{hash}.jpg?{qs}'.format(
     base=url_base, hash=email_hash, qs=query_string)
-  
+
 class User(AbstractUser):
   first_name = None
   last_name = None
@@ -110,7 +110,7 @@ SOCIAL_INFO = {
 
 class SocialHandle(models.Model):
   user = models.ForeignKey(
-      settings.AUTH_USER_MODEL, related_name='social_handles')
+      settings.AUTH_USER_MODEL, related_name='social_handles', on_delete=models.PROTECT)
   username = models.CharField(max_length=255)
   site = models.CharField(max_length=25, choices=SOCIAL_SITES)
 
@@ -125,7 +125,7 @@ class SocialHandle(models.Model):
 
 
 class EmailVerification(models.Model):
-  user = models.ForeignKey(settings.AUTH_USER_MODEL)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   sent_to = models.EmailField()
   secret = models.CharField(max_length=255, unique=True)
   used = models.BooleanField(default=False)
