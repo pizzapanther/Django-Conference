@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
 setup(
   name='conference',
@@ -8,6 +8,6 @@ setup(
   author='Paul Bailey',
   author_email='paul@neutron.academy',
   license='MIT',
-  packages=['conference'],
+  packages=find_packages(),
   zip_safe=True
 )
