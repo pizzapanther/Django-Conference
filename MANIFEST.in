@@ -1,1 +1,1 @@
-recursive-include *.html
+recursive-include conference *.html
