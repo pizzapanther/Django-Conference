@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import mark_safe
 
 from conference.settings import SPONSOR_NOTIFY, SPEAKER_NOTIFY, SITE_DOMAIN, SITE_PROTOCOL
 
@@ -108,9 +109,7 @@ class Sponsor(models.Model):
     return self.name
 
   def link(self):
-    return '<a href="{}" target="_blank">Webpage &raquo;</a>'.format(self.url)
-
-  link.allow_tags = True
+    return mark_safe('<a href="{}" target="_blank">Webpage &raquo;</a>'.format(self.url))
 
   def logo_url(self):
     return self.logo.url
@@ -330,10 +329,8 @@ class Invoice(models.Model):
     if self.sent:
       return ''
 
-    return '<a href="./{}/send/" onclick="return confirm(\'Are you sure you want to send this invoice?\')">Send Invoice</a>'.format(
-        self.id)
-
-  Send.allow_tags = True
+    return mark_safe('<a href="./{}/send/" onclick="return confirm(\'Are you sure you want to send this invoice?\')">Send Invoice</a>'.format(
+        self.id))
 
   def url(self):
     return reverse('conference-invoice', args=(self.key,))
@@ -342,9 +339,7 @@ class Invoice(models.Model):
     if self.paid_on:
       return 'Paid: {}'.format(self.stripe_charge)
 
-    return '<a href="{}" target="_blank">Payment Link</a>'.format(self.url())
-
-  Payment.allow_tags = True
+    return mark_safe('<a href="{}" target="_blank">Payment Link</a>'.format(self.url()))
 
   def cents(self):
     return int(self.amount * 100)
